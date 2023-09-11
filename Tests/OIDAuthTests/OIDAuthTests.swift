@@ -1,5 +1,5 @@
-import XCTest
 @testable import OIDAuth
+import XCTest
 
 final class OIDAuthTests: XCTestCase {
     func testExample() throws {

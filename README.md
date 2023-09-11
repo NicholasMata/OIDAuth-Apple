@@ -15,14 +15,6 @@ does not mean I am not open to listening to any suggestions.**
 This library is meant for developers who need to authenticate against a 100% OpenID OAuth2.0 Authentication Server. How do you know if
 this is you? If you have a well known openid configuration url, this library is for you.
 
-## Specifications
-
-As I mentioned earlier this realizes on Apple's ASWebAuthenticationSession which requires specific minimum OS versions.
-At the time of writting this it is.
-iOS 12.0+, iPadOS 12.0+, macOS 10.15+, tvOS 16.0+, watchOS 6.2+, visionOS 1.0+ (beta).
-
-You can check [Apple's Developer documentation](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession) for any updates to this. 
-
 ## Setup
 
 Currently only Swift Package Manager support is available and tested. The reason for only supporting SPM is that it is the offical 

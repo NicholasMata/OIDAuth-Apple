@@ -8,19 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		A16E9AE22A93E60600468589 /* Example_SwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16E9AE12A93E60600468589 /* Example_SwiftUIApp.swift */; };
-		A16E9AE42A93E60600468589 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16E9AE32A93E60600468589 /* ContentView.swift */; };
+		A16E9AE42A93E60600468589 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16E9AE32A93E60600468589 /* SignInView.swift */; };
 		A16E9AE62A93E60700468589 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A16E9AE52A93E60700468589 /* Assets.xcassets */; };
 		A16E9AE92A93E60700468589 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A16E9AE82A93E60700468589 /* Preview Assets.xcassets */; };
 		A16E9AF42A94006700468589 /* OIDAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A16E9AF32A94006700468589 /* OIDAuth */; };
+		F63DB7842AA8FFFF00737A12 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F63DB7832AA8FFFF00737A12 /* SceneDelegate.swift */; };
+		F6F68DC12AAA565E00EAE468 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F68DC02AAA565E00EAE468 /* ContentView.swift */; };
+		F6F68DC32AAA56AB00EAE468 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F68DC22AAA56AB00EAE468 /* RootView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A16E9ADE2A93E60600468589 /* Example-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A16E9AE12A93E60600468589 /* Example_SwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example_SwiftUIApp.swift; sourceTree = "<group>"; };
-		A16E9AE32A93E60600468589 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A16E9AE32A93E60600468589 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		A16E9AE52A93E60700468589 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A16E9AE82A93E60700468589 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A16E9AF12A93F9A400468589 /* OIDAuth */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = OIDAuth; path = ../..; sourceTree = "<group>"; };
+		F63DB7832AA8FFFF00737A12 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		F63DB7852AA9018100737A12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F6F68DC02AAA565E00EAE468 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F6F68DC22AAA56AB00EAE468 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +63,12 @@
 		A16E9AE02A93E60600468589 /* Example-SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				F63DB7852AA9018100737A12 /* Info.plist */,
 				A16E9AE12A93E60600468589 /* Example_SwiftUIApp.swift */,
-				A16E9AE32A93E60600468589 /* ContentView.swift */,
+				F63DB7832AA8FFFF00737A12 /* SceneDelegate.swift */,
+				F6F68DC22AAA56AB00EAE468 /* RootView.swift */,
+				A16E9AE32A93E60600468589 /* SignInView.swift */,
+				F6F68DC02AAA565E00EAE468 /* ContentView.swift */,
 				A16E9AE52A93E60700468589 /* Assets.xcassets */,
 				A16E9AE72A93E60700468589 /* Preview Content */,
 			);
@@ -160,8 +171,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A16E9AE42A93E60600468589 /* ContentView.swift in Sources */,
+				A16E9AE42A93E60600468589 /* SignInView.swift in Sources */,
 				A16E9AE22A93E60600468589 /* Example_SwiftUIApp.swift in Sources */,
+				F6F68DC12AAA565E00EAE468 /* ContentView.swift in Sources */,
+				F63DB7842AA8FFFF00737A12 /* SceneDelegate.swift in Sources */,
+				F6F68DC32AAA56AB00EAE468 /* RootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,7 +307,7 @@
 				DEVELOPMENT_TEAM = 72NH26LUXP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = "Example-SwiftUI/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -323,7 +337,7 @@
 				DEVELOPMENT_TEAM = 72NH26LUXP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = "Example-SwiftUI/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

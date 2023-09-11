@@ -2,24 +2,60 @@
 //  ContentView.swift
 //  Example-SwiftUI
 //
-//  Created by Nicholas Mata on 8/21/23.
+//  Created by Nicholas Mata on 9/7/23.
 //
 
 import OIDAuth
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var authClient: AuthClient
+    @EnvironmentObject var tokenManager: KeychainTokenManager
+
     var body: some View {
-        VStack {
-          Button {
-            let config = StaticAuthConfiguration(authorizeUrl: URL(string: "https://authorization-server.com/authorize")!,
-                                                 tokenUrl: URL(string: "https://authorization-server.com/token")!,
-                                                 endSessionUrl: URL(string: "https://authorization-server.com/authorize")!)
-            AuthClient(clientId: "XboI9iUIUNWBGjXm6mmWg8AZ", configuration: config)
-          } label: {
-            Text("Sign in")
-          }
+        VStack(spacing: 20) {
+            Button {
+                Task.detached {
+                    try await authClient.acquireToken(skipStorage: true, scopes: scopes)
+                }
+            } label: {
+                Text("Refresh")
+            }
+            if let idToken = tokenManager.idToken {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("ID Token").bold()
+                    Text(idToken).lineLimit(2).contextMenu(ContextMenu(menuItems: {
+                        Button("Copy", action: {
+                            UIPasteboard.general.string = idToken
+                        })
+                    }))
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            }
+            if let accessToken = tokenManager.accessToken {
+                VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Access Token").bold()
+                        Text(accessToken.token).lineLimit(2).contextMenu(ContextMenu(menuItems: {
+                            Button("Copy", action: {
+                                UIPasteboard.general.string = accessToken.token
+                            })
+                        }))
+                    }.frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Retrieved On").bold()
+                        Text("\(accessToken.retrievedOn)")
+                    }.frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            Button {
+                withAnimation {
+                    authClient.endSession()
+                }
+            } label: {
+                Text("Sign Out")
+            }
         }
+        .frame(maxWidth: .infinity)
         .padding()
     }
 }
