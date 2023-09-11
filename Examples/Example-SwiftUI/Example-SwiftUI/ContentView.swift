@@ -31,7 +31,7 @@ struct ContentView: View {
                     }))
                 }.frame(maxWidth: .infinity, alignment: .leading)
             }
-            if let accessToken = tokenManager.accessToken {
+            if let accessToken = tokenManager.accessToken(for: nil) {
                 VStack(alignment: .leading, spacing: 10) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Access Token").bold()

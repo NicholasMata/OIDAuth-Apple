@@ -12,11 +12,7 @@ private let retrievedOnKey = "retrieved_on"
 
 public class KeychainTokenManager: TokenManager, ObservableObject {
     private var account: String
-    @Published public var accessToken: Token? = nil {
-        didSet {
-            KeychainTokenManager.store(token: accessToken, with: "access_token", for: account)
-        }
-    }
+    private var accessTokens: [String: Token] = [:]
 
     @Published public var refreshToken: Token? = nil {
         didSet {
@@ -24,14 +20,14 @@ public class KeychainTokenManager: TokenManager, ObservableObject {
         }
     }
 
-    public var idToken: String? = nil {
+    @Published public var idToken: String? = nil {
         didSet {
             KeychainTokenManager.store(idToken: idToken, for: account)
         }
     }
 
     public var hasValidToken: Bool {
-        return accessToken?.isValid() ?? refreshToken?.isValid() ?? false
+        return refreshToken?.isValid() ?? false
     }
 
     private var decoder: JSONDecoder = {
@@ -45,20 +41,40 @@ public class KeychainTokenManager: TokenManager, ObservableObject {
         if let idTokenData = KeychainHelper.retrieveData(service: "id_token", account: account) {
             idToken = String(data: idTokenData, encoding: .utf8)
         }
-        accessToken = KeychainTokenManager.token(with: "access_token", for: account)
         refreshToken = KeychainTokenManager.token(with: "refresh_token", for: account)
     }
 
-    public func decode(from response: Data) {
+    public func accessToken(for key: String?) -> Token? {
+        guard let key = key else {
+            return accessTokens.first?.value
+        }
+        return accessTokens[key]
+    }
+
+    public func decode(from response: Data, for key: String) {
         guard let response = try? decoder.decode(OIDTokenResponse.self, from: response) else {
             return
         }
-        accessToken = Token(token: response.accessToken, expiresIn: response.expiresIn, retrievedOn: Date())
+        DispatchQueue.main.async {
+            self.accessTokens[key] = Token(token: response.accessToken, expiresIn: response.expiresIn, retrievedOn: Date())
+        }
         if let refreshToken = response.refreshToken {
             let refreshTokenExpiresIn = response.refreshTokenExpiresIn ?? Int.max
-            self.refreshToken = Token(token: refreshToken, expiresIn: refreshTokenExpiresIn, retrievedOn: Date())
+            DispatchQueue.main.async {
+                self.refreshToken = Token(token: refreshToken, expiresIn: refreshTokenExpiresIn, retrievedOn: Date())
+            }
         }
-        idToken = response.idToken
+        DispatchQueue.main.async {
+            self.idToken = response.idToken
+        }
+    }
+
+    public func clear() {
+        DispatchQueue.main.async {
+            self.refreshToken = nil
+            self.idToken = nil
+            self.accessTokens = [:]
+        }
     }
 
     private static func store(idToken: String?, for account: String) {

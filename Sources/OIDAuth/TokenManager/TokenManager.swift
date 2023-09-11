@@ -9,12 +9,13 @@ import Foundation
 
 public protocol TokenManager {
     /// The access token used for making API calls
-    var accessToken: Token? { get set }
     var refreshToken: Token? { get set }
     var idToken: String? { get set }
     var hasValidToken: Bool { get }
 
-    func decode(from response: Data)
+    func accessToken(for key: String?) -> Token?
+    func decode(from response: Data, for key: String)
+    func clear()
 }
 
 public struct Token {

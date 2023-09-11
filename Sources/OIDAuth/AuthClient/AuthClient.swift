@@ -28,6 +28,7 @@ public class AuthClient: ObservableObject {
     private var network: AuthClientNetwork
     private var tokenManager: TokenManager
     private var pkce: PKCE?
+    private var loginScopes: [String]? = nil
 
     public init(clientID: String,
                 wellKnownUrl: String,
@@ -60,11 +61,15 @@ public class AuthClient: ObservableObject {
         self.pkce = pkce
     }
 
+    private func key(from scopes: [String]) -> String {
+        return scopes.joined(separator: " ")
+    }
+
     private func buildWebAuthSession(type: OIDAuthClientLoginType = .authorizationCode,
                                      authorizeUrl: URL,
                                      redirectUrl: URL,
                                      state: String,
-                                     scopes: [String] = ["openid"],
+                                     scopes: [String],
                                      codeChallenge: String?,
                                      codeChallengeMethod: String?,
                                      prefersEphemeralWebBrowserSession: Bool = false,
@@ -78,7 +83,7 @@ public class AuthClient: ObservableObject {
             "client_id": clientID,
             "response_type": type.rawValue,
             "redirect_uri": redirectUrl.absoluteString,
-            "scope": scopes.joined(separator: " "),
+            "scope": key(from: scopes),
             "state": state,
         ]
         if type == .authorizationCode,
@@ -113,6 +118,7 @@ public class AuthClient: ObservableObject {
                       on presentationContextProvider: ASWebAuthenticationPresentationContextProviding = WindowWebAuthenticationPresentationContext(),
                       prefersEphemeralWebBrowserSession: Bool = false) async throws
     {
+        loginScopes = scopes
         let codeVerifier = pkce?.createCodeVerifier()
         var codeChallenge: String? = nil
         if let codeVerifier = codeVerifier {
@@ -161,27 +167,28 @@ public class AuthClient: ObservableObject {
                 return
             }
             let response = try await network.retrieveToken(for: self, using: code, redirectingTo: redirectURL.absoluteString, withVerifier: codeVerifier)
-            tokenManager.decode(from: response)
+            tokenManager.decode(from: response, for: key(from: scopes))
         }
     }
 
     public func acquireToken(skipStorage: Bool = false, scopes: [String]? = nil) async throws -> String {
-        if let accessToken = tokenManager.accessToken, accessToken.isValid(), !skipStorage, scopes != nil {
+        let scopesKey = key(from: scopes ?? loginScopes ?? [])
+        let accessToken = tokenManager.accessToken(for: scopesKey)
+        if let accessToken = accessToken, accessToken.isValid(), !skipStorage {
             return accessToken.token
         }
         guard let refreshToken = tokenManager.refreshToken, refreshToken.isValid() else {
             throw AuthClientError.unableToAcquireToken
         }
         let response = try await network.refreshToken(for: self, with: refreshToken.token, scopes: scopes)
-        tokenManager.decode(from: response)
-        guard let accessToken = tokenManager.accessToken, accessToken.isValid() else {
+        tokenManager.decode(from: response, for: scopesKey)
+        guard let accessToken = tokenManager.accessToken(for: scopesKey), accessToken.isValid() else {
             throw AuthClientError.unableToAcquireToken
         }
         return accessToken.token
     }
 
     public func endSession() {
-        tokenManager.accessToken = nil
-        tokenManager.refreshToken = nil
+        tokenManager.clear()
     }
 }
