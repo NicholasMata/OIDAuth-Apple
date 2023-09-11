@@ -172,7 +172,8 @@ public class AuthClient: ObservableObject {
     }
 
     public func acquireToken(skipStorage: Bool = false, scopes: [String]? = nil) async throws -> String {
-        let scopesKey = key(from: scopes ?? loginScopes ?? [])
+        let scopes = scopes ?? loginScopes ?? []
+        let scopesKey = key(from: scopes)
         let accessToken = tokenManager.accessToken(for: scopesKey)
         if let accessToken = accessToken, accessToken.isValid(), !skipStorage {
             return accessToken.token

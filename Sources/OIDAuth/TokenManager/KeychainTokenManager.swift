@@ -55,9 +55,7 @@ public class KeychainTokenManager: TokenManager, ObservableObject {
         guard let response = try? decoder.decode(OIDTokenResponse.self, from: response) else {
             return
         }
-        DispatchQueue.main.async {
-            self.accessTokens[key] = Token(token: response.accessToken, expiresIn: response.expiresIn, retrievedOn: Date())
-        }
+        accessTokens[key] = Token(token: response.accessToken, expiresIn: response.expiresIn, retrievedOn: Date())
         if let refreshToken = response.refreshToken {
             let refreshTokenExpiresIn = response.refreshTokenExpiresIn ?? Int.max
             DispatchQueue.main.async {
